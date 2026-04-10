@@ -1,4 +1,3 @@
-import math
 
 # load user interface sprites
 icons = SpriteSheet("assets/ui/icons.png", 4, 1)
