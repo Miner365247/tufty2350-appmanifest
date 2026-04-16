@@ -1,6 +1,8 @@
+from logging import root
 import os
 import math
-
+import json
+from modules.common.badgeware.filesystem import file_exists, is_dir
 import ui
 
 orange = color.rgb(246, 135, 4)
@@ -114,13 +116,20 @@ class Apps:
             if len(word) <= 1:
                 return word
             return word[0].upper() + word[1:]
+        if is_dir(f"{root}/{path}"):
+                if file_exists(f"{root}/{path}/appmanifest.json"):
+                    with open(f"{root}/{path}/appmanifest.json") as f:
+                        data=json.load(f)
+                        name=data.get("title", None)
+                else:
+                    name=None
+        if name==None:
+            for path in sorted(os.listdir(root)):
+                name = " ".join([capitalize(word) for word in path.split("_")])
 
-        for path in sorted(os.listdir(root)):
-            name = " ".join([capitalize(word) for word in path.split("_")])
-
-            if is_dir(f"{root}/{path}"):
-                if file_exists(f"{root}/{path}/icon.png"):
-                    App(self.apps, name, path, image.load(f"{root}/{path}/icon.png"))
+        if is_dir(f"{root}/{path}"):
+            if file_exists(f"{root}/{path}/icon.png"):
+                App(self.apps, name, path, image.load(f"{root}/{path}/icon.png"))
 
     @property
     def active(self):
