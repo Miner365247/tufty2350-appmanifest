@@ -117,30 +117,31 @@ class Apps:
             if len(word) <= 1:
                 return word
             return word[0].upper() + word[1:]
-        if is_dir(f"{root}/{path}"):
-                if file_exists(f"{root}/{path}/appmanifest.json"):
-                    with open(f"{root}/{path}/appmanifest.json") as f:
-                        try:
+        for path in sorted(os.listdir(root)):
+            if file_exists(f"{root}/{path}/appmanifest.json"):
+                    try:
+                        with open(f"{root}/{path}/appmanifest.json") as f:
                             data=json.load(f)
-                        except Exception:
-                            data = {}
-                        name=data.get("title", None)
-                        normal_color=data.get("color",None)
-                        fade_color=data.get("fade_color",None)
-                        custom_color=tuple(normal_color) if normal_color else None
-                        custom_fade_color=tuple(fade_color) if fade_color else None
+                            name=data.get("title", None)
+                            normal_color=data.get("color",None) # Should be a 4 integer list being passed into normal_color
+                            fade_color=data.get("fade_color",None) # Should be a 4 integer list being passed into fade_color
+                            custom_color=tuple(normal_color) if normal_color else None
+                            custom_fade_color=tuple(fade_color) if fade_color else None
+                    except Exception:
+                        name=None
+                        custom_color=None
+                        custom_fade_color=None
 
-                else:
-                    name=None
-                    custom_color=None
-                    custom_fade_color=None
-        if name==None:
-            for path in sorted(os.listdir(root)):
+            else:
+                name=None
+                custom_color=None
+                custom_fade_color=None
+            if name is None:
                 name = " ".join([capitalize(word) for word in path.split("_")])
 
-        if is_dir(f"{root}/{path}"):
-            if file_exists(f"{root}/{path}/icon.png"):
-                App(self.apps, name, path, image.load(f"{root}/{path}/icon.png"), custom_color=custom_color, custom_fade_color=custom_fade_color)
+            if is_dir(f"{root}/{path}"):
+                if file_exists(f"{root}/{path}/icon.png"):
+                    App(self.apps, name, path, image.load(f"{root}/{path}/icon.png"), custom_color, custom_fade_color)
 
     @property
     def active(self):
