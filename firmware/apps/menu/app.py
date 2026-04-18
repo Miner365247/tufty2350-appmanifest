@@ -118,6 +118,9 @@ class Apps:
                 return word
             return word[0].upper() + word[1:]
         for path in sorted(os.listdir(root)):
+            name=None
+            custom_color=None
+            custom_fade_color=None
             if file_exists(f"{root}/{path}/appmanifest.json"):
                     try:
                         with open(f"{root}/{path}/appmanifest.json") as f:
@@ -128,14 +131,8 @@ class Apps:
                             custom_color=tuple(normal_color) if normal_color else None
                             custom_fade_color=tuple(fade_color) if fade_color else None
                     except Exception:
-                        name=None
-                        custom_color=None
-                        custom_fade_color=None
+                            pass
 
-            else:
-                name=None
-                custom_color=None
-                custom_fade_color=None
             if name is None:
                 name = " ".join([capitalize(word) for word in path.split("_")])
 
