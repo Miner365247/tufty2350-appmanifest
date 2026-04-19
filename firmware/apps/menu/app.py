@@ -1,7 +1,6 @@
 import os
 import math
 import json
-from modules.common.badgeware.filesystem import file_exists, is_dir
 import ui
 
 orange = color.rgb(246, 135, 4)
@@ -122,16 +121,16 @@ class Apps:
             custom_color=None
             custom_fade_color=None
             if file_exists(f"{root}/{path}/appmanifest.json"):
-                    try:
-                        with open(f"{root}/{path}/appmanifest.json") as f:
-                            data=json.load(f)
-                            name=data.get("title", None)
-                            normal_color=data.get("color",None) # Should be a 4 integer list being passed into normal_color
-                            fade_color=data.get("fade_color",None) # Should be a 4 integer list being passed into fade_color
-                            custom_color=tuple(normal_color) if normal_color else None
-                            custom_fade_color=tuple(fade_color) if fade_color else None
-                    except Exception:
-                            pass
+                try:
+                    with open(f"{root}/{path}/appmanifest.json") as f:
+                        data=json.load(f)
+                        name=data.get("title", None)
+                        normal_color=data.get("color",None) # Should be a 4 integer list being passed into normal_color
+                        fade_color=data.get("fade_color",None) # Should be a 4 integer list being passed into fade_color
+                        custom_color=tuple(normal_color) if normal_color else None
+                        custom_fade_color=tuple(fade_color) if fade_color else None
+                except Exception:
+                        pass
 
             if name is None:
                 name = " ".join([capitalize(word) for word in path.split("_")])
